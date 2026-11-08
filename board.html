@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>강사 라이브 보드 · ZERO MOMENTUM</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+</head><body>
+<script src="js/core.js"></script><script src="js/chapters.js"></script>
+<div class="board-top"><div class="wrap">
+  <div class="row" style="align-items:flex-start;gap:24px">
+    <div style="flex:1;min-width:280px">
+      <div class="kicker" style="color:var(--yellow)">FACILITATOR LIVE BOARD</div>
+      <h1 style="margin:.1em 0">강사 라이브 보드</h1>
+      <div class="row" style="margin-top:10px"><span>방 코드</span><span class="display" id="code" style="font-size:2.6rem;color:var(--yellow);letter-spacing:3px">—</span>
+        <input id="roomIn" placeholder="기존 방 코드" style="width:150px;text-transform:uppercase"><button class="btn y sm" id="useRoom">열기</button><button class="btn ghost sm" style="color:#fff" id="newRoom">새 방 만들기</button></div>
+      <div class="row" style="margin-top:10px"><span class="small">챕터</span><select id="chSel" style="width:auto;max-width:420px"></select><span class="small" id="stat"></span></div>
+      <div class="small" style="margin-top:10px;opacity:.85">참여자 <b id="pc">0</b>명</div><div class="who" id="who" style="margin-top:6px"></div>
+    </div>
+    <div style="text-align:center"><div class="qrbox" id="qr"></div><div class="small" style="margin-top:6px;opacity:.8;max-width:200px;word-break:break-all" id="link"></div><button class="btn ghost sm" style="color:#fff;margin-top:6px" id="copy">링크 복사</button></div>
+  </div>
+</div></div>
+<div class="wrap">
+  <div class="callout small" style="margin-top:18px">수강생은 QR을 찍거나 링크로 접속해 닉네임을 입력하면 이 방에 참여합니다. 수강생이 해당 챕터에서 응답하면 아래 차트·포스트잇이 실시간으로 갱신됩니다. 응답은 공개 중계 서버(ntfy.sh)에 12시간 보관되므로, 수업마다 <b>새 방</b>을 만들어 사용하세요. 개인 부채 금액은 전송되지 않습니다.</div>
+  <div class="board-grid" id="grid"></div>
+</div>
+<div class="footer">ZERO MOMENTUM · 제로 모멘텀 — 다인에듀 HR 프로그램</div>
+<script>
+const {$, LIVE, renderActivity, store, toast, esc} = ZM;
+ZM.topbar('board');
+const sel=$('#chSel');
+sel.innerHTML=CHAPTERS.map(c=>`<option value="${c.no}">${c.no}장 · ${c.title}</option>`).join('');
+const gen=()=>{ const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(let i=0;i<6;i++) s+=a[Math.floor(Math.random()*a.length)]; return s; };
+const p=new URLSearchParams(location.search);
+let room=(p.get('room')||store.get('boardRoom','')||'').toUpperCase(); if(!room) room=gen();
+sel.value=p.get('ch')||store.get('boardCh','0');
+if(!LIVE.me.n) LIVE.setNick('강사');
+function openRoom(r){
+  room=r.toUpperCase(); store.set('boardRoom',room); LIVE.setRoom(room); $('#code').textContent=room;
+  const url=new URL('lesson.html',location.href); url.searchParams.set('ch',sel.value); url.searchParams.set('room',room);
+  $('#link').textContent=url.href;
+  const q=qrcode(0,'M'); q.addData(url.href); q.make(); $('#qr').innerHTML=q.createSvgTag({scalable:true,margin:2});
+  history.replaceState(null,'',`board.html?room=${room}&ch=${sel.value}`);
+  drawGrid();
+}
+function drawGrid(){
+  store.set('boardCh',sel.value);
+  const ch=CHAPTERS[+sel.value]; const g=$('#grid'); g.innerHTML='';
+  ch.blocks.filter(b=>b.live).forEach(b=>{ const box=document.createElement('div'); g.appendChild(box); renderActivity(box,b.live,{board:true}); });
+  if(!g.children.length) g.innerHTML='<div class="card">이 챕터에는 공유 활동이 없습니다.</div>';
+}
+sel.onchange=()=>openRoom(room);
+$('#newRoom').onclick=()=>openRoom(gen());
+$('#useRoom').onclick=()=>{ const v=$('#roomIn').value.trim(); if(v) openRoom(v); };
+$('#copy').onclick=()=>navigator.clipboard?.writeText($('#link').textContent).then(()=>toast('링크가 복사되었습니다'));
+LIVE.on(()=>{ const ppl=LIVE.people(); ppl.delete(LIVE.me.u); $('#pc').textContent=ppl.size; $('#who').innerHTML=[...ppl.values()].map(n=>`<span>${esc(n)}</span>`).join(''); $('#stat').textContent= LIVE.status==='live'?'🟢 실시간 연결됨':LIVE.status==='offline'?'🔴 연결 끊김 (재시도 중)':'연결 중…'; });
+openRoom(room);
+</script>
+</body></html>

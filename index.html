@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZERO MOMENTUM · 제로 모멘텀 — 빚을 끊는 3M 블루프린트</title>
+<meta name="description" content="다인에듀 HR 프로그램: 교재 Debt-Free Blueprint 기반 챕터별 실시간 실습과 개인 부채 대시보드">
+<link rel="stylesheet" href="css/style.css">
+</head><body>
+<script src="js/core.js"></script><script src="js/chapters.js"></script>
+<section class="hero"><div class="wrap hero-grid">
+  <div>
+    <div class="kicker" style="color:var(--yellow)">다인에듀 HR 프로그램 · DEBT-FREE</div>
+    <h1 class="display">ZERO<br>MOMENTUM</h1>
+    <div class="ko">제로 모멘텀 — 빚을 0으로, 삶에는 가속을</div>
+    <p class="lead">어떤 소득이든 빚을 빠르게 끊는 <b>3M 블루프린트</b>. 마인드셋(Mindset)으로 이유를 세우고, 계산(Math)으로 공격 계획을 짜고, 모멘텀(Momentum)으로 눈덩이를 굴립니다.</p>
+    <div class="row" style="margin-top:18px"><a class="btn y" href="lesson.html?ch=0">▶ 0장부터 시작하기</a><a class="btn ghost" style="color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4)" href="dashboard.html">📊 나의 부채 대시보드</a></div>
+  </div>
+  <div class="hero-card">
+    <div class="kicker">LIVE CLASS</div>
+    <h3>실시간 수업 참여</h3>
+    <p class="small muted">강사가 알려준 방 코드로 들어오면, 각 챕터의 투표·퀴즈·포스트잇이 같은 방 참여자와 실시간으로 공유됩니다. 개인 부채 금액은 내 기기에만 저장됩니다.</p>
+    <div class="row"><input id="hr" placeholder="방 코드" style="flex:1;text-transform:uppercase"><input id="hn" placeholder="닉네임" style="flex:1"></div>
+    <div class="row" style="margin-top:10px"><button class="btn" id="hj">참여하기</button><a class="btn ghost" href="board.html">👩‍🏫 강사: 방 만들기</a></div>
+    <div id="hs" class="small" style="margin-top:8px"></div>
+  </div>
+</div></section>
+
+<div class="wrap">
+  <div class="pillars">
+    <div class="pillar m1"><span class="pill mind">MINDSET</span><b>왜 갚는가</b><span class="small">빚은 좋은 사람에게도 생긴다 · 나의 Why · 셀프 이미지 리셋</span></div>
+    <div class="pillar m2"><span class="pill math">MATH</span><b>어떻게 갚는가</b><span class="small">부채 건강검진 · 스냅샷 · 스노우볼 vs 애벌랜치 · 사라의 예시</span></div>
+    <div class="pillar m3"><span class="pill mom">MOMENTUM</span><b>끝까지 굴리는가</b><span class="small">비상금 · 자동화 · 재배분 · 동기 시스템 · 선언문 · 6개월 체크인</span></div>
+  </div>
+
+  <section class="block">
+    <div class="sec-title"><h2>16개 챕터 실습</h2><span class="muted small">교재 순서 그대로 · 각 챕터마다 실시간 공유 활동과 도표</span></div>
+    <div class="chapgrid" id="chaps"></div>
+  </section>
+
+  <section class="block grid3">
+    <div class="card"><div class="kicker">STEP 1</div><h3>👩‍🏫 강사는 방을 만든다</h3><p class="small">‘강사 보드’에서 방 코드를 만들고 QR을 화면에 띄웁니다. 챕터를 고르면 그 챕터의 모든 응답이 큰 화면에 실시간 차트로 모입니다.</p><a class="btn sm" href="board.html">강사 보드 열기</a></div>
+    <div class="card"><div class="kicker">STEP 2</div><h3>🙋 수강생은 함께 실습한다</h3><p class="small">QR이나 코드로 참여 → 챕터의 체크리스트·계산기·워크시트를 직접 해보고, 투표·퀴즈·포스트잇은 실시간으로 공유합니다.</p><a class="btn sm" href="lesson.html?ch=0">실습 시작</a></div>
+    <div class="card"><div class="kicker">STEP 3</div><h3>📊 나만의 대시보드로 관리한다</h3><p class="small">워크시트에 입력한 부채가 대시보드로 이어집니다. 상환 일정, 완납 예정일, 이자, 색칠 차트, 결제일 달력까지 한눈에.</p><a class="btn sm" href="dashboard.html">대시보드 열기</a></div>
+  </section>
+</div>
+<div class="footer">ZERO MOMENTUM · 제로 모멘텀 — 다인원격평생교육직업학원(다인에듀) HR 프로그램<br>교재: <i>Debt-Free Blueprint: Crush Debt Fast on Any Income</i> (Nora's Creations) · 개인 데이터는 브라우저(localStorage)에만 저장됩니다.</div>
+<script>
+ZM.topbar('home'); ZM.initRoomFromURL();
+const done=ZM.store.get('done',{});
+document.getElementById('chaps').innerHTML=CHAPTERS.map(c=>{const p=PARTS[c.part];return `<a class="chap" href="lesson.html?ch=${c.no}"><span class="no">${String(c.no).padStart(2,'0')}</span><span class="pill ${p.cls}">${p.k}</span><h4>${c.title}</h4><p>${c.en}</p>${done[c.no]?'<span class="done">✓ 완료</span>':''}</a>`}).join('');
+const hr=document.getElementById('hr'),hn=document.getElementById('hn'),hs=document.getElementById('hs');
+hr.value=ZM.LIVE.room; hn.value=ZM.LIVE.me.n;
+const st=()=>{hs.innerHTML=ZM.LIVE.room?`현재 방: <b>${ZM.LIVE.room}</b> · ${ZM.LIVE.status==='live'?'🟢 실시간 연결됨':'연결 중…'}`:'개인 모드 (방에 참여하지 않음)';};
+ZM.LIVE.on(st); st();
+document.getElementById('hj').onclick=()=>{ if(!hr.value.trim()||!hn.value.trim()) return ZM.toast('방 코드와 닉네임을 입력해 주세요'); ZM.LIVE.setNick(hn.value); ZM.LIVE.setRoom(hr.value); ZM.toast('참여했습니다! 0장으로 이동하세요'); };
+</script>
+</body></html>

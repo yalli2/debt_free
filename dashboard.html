@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>나의 부채 대시보드 · ZERO MOMENTUM</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+.dash-head{background:var(--navy);color:#fff;padding:26px 0 54px}
+.dash-head h1{margin:0}
+.ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:14px}
+.ctrl > div{display:flex;flex-direction:column;gap:4px}
+.ctrl label{color:#c9d3e3;font-size:.78rem}
+.ctrl input,.ctrl select{width:auto;min-width:130px}
+.dash{margin-top:-34px}
+.dash .card{margin-bottom:18px}
+.seg{display:inline-flex;background:rgba(255,255,255,.12);border-radius:12px;padding:3px}
+.seg button{border:0;background:transparent;color:#fff;font:inherit;font-weight:700;padding:8px 12px;border-radius:9px;cursor:pointer}
+.seg button.on{background:var(--yellow);color:var(--navy)}
+.empty{text-align:center;padding:40px 10px}
+</style>
+</head><body>
+<script src="js/core.js"></script>
+<div class="dash-head"><div class="wrap">
+  <div class="kicker" style="color:var(--yellow)">MY DEBT-FREE DASHBOARD</div>
+  <h1>나의 부채 대시보드</h1>
+  <p class="small" style="opacity:.8;margin:.3em 0 0">🔒 모든 데이터는 이 브라우저에만 저장됩니다. 다른 기기로 옮길 땐 ‘내보내기/가져오기’를 사용하세요.</p>
+  <div class="ctrl">
+    <div><label>상환 전략</label><div class="seg" id="strat"><button data-s="snowball">⛄ 스노우볼</button><button data-s="avalanche">🏔️ 애벌랜치</button></div></div>
+    <div><label>매달 추가 상환액</label><input type="number" id="extra" min="0"></div>
+    <div><label>통화</label><select id="cur"><option value="KRW">원 (₩)</option><option value="USD">달러 ($)</option></select></div>
+    <div><label>시작 월</label><input type="month" id="start"></div>
+    <div style="margin-left:auto;flex-direction:row;gap:6px;flex-wrap:wrap">
+      <button class="btn y sm" id="sample">예시 데이터</button>
+      <button class="btn ghost sm" style="color:#fff" id="exp">⬇ 내보내기</button>
+      <label class="btn ghost sm" style="color:#fff;margin:0">⬆ 가져오기<input type="file" id="imp" accept=".json" hidden></label>
+      <button class="btn ghost sm" style="color:#fff" id="reset">초기화</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="wrap dash">
+  <div class="grid4" id="kpis"></div>
+  <div class="card" style="margin-top:18px">
+    <div class="row" style="justify-content:space-between"><h3 style="margin:0">📋 부채 목록 (Debt Snapshot)</h3><button class="btn sm" id="add">＋ 부채 추가</button></div>
+    <div class="tbl-wrap" style="margin-top:10px"><table class="t" id="tbl"></table></div>
+    <p class="small muted" style="margin:8px 0 0">‘처음 금액’은 진척률 계산의 기준입니다. 상환 기록을 추가하면 잔액이 자동으로 줄어듭니다.</p>
+  </div>
+  <div id="body"></div>
+</div>
+<div class="footer">ZERO MOMENTUM · 제로 모멘텀 — 다인에듀 · <a href="index.html">프로그램 홈</a> · <a href="lesson.html?ch=4">4장 스냅샷 워크시트</a></div>
+<script src="js/dashboard.js"></script>
+</body></html>
